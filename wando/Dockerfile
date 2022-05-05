@@ -1,4 +1,4 @@
-FROM adopt-openjdk-11
-ARG JAR_FILE=target/*.war
+FROM adoptopenjdk:latest
+ARG JAR_FILE
 COPY ${JAR_FILE} app.jar
 ENTRYPOINT {"java", "-jar", "/app.jar"}
