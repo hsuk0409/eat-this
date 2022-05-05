@@ -1,4 +1,9 @@
 FROM adoptopenjdk:latest
-ARG JAR_FILE
-COPY ${JAR_FILE} app.jar
+COPY gradlew .
+COPY gradle gradle
+COPY build.gradle .
+COPY settings.gradle .
+COPY src src
+
+EXPOSE 8080
 ENTRYPOINT {"java", "-jar", "/app.jar"}
