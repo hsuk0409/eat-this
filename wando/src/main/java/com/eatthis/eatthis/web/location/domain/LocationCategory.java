@@ -1,19 +1,22 @@
 package com.eatthis.eatthis.web.location.domain;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
-public enum LocationCategory {
+@NoArgsConstructor
+public class LocationCategory {
 
-    FOOD("FD6", "음식점")
-    ;
+    private String groupCode;
+    private String groupName;
+    private String fullName;
 
-    private final String code;
-    private final String description;
-
-    LocationCategory(String code, String description) {
-        this.code = code;
-        this.description = description;
+    @Builder
+    public LocationCategory(String groupCode, String groupName, String fullName) {
+        this.groupCode = groupCode;
+        this.groupName = groupName;
+        this.fullName = fullName;
     }
 
 }
