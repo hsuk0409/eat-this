@@ -71,7 +71,7 @@ public class KakaoApiService {
         int page = 2;
         while (!ObjectUtils.isEmpty(isEnd) && !isEnd) {
             uri = uriComponentsBuilder
-                    .replaceQueryParam("page", page)
+                    .replaceQueryParam("page", page++)
                     .encode(StandardCharsets.UTF_8)
                     .build().toUri();
             responseEntity = restTemplate.exchange(
@@ -83,7 +83,6 @@ public class KakaoApiService {
             convertAndSaveSearchResponseDto(documents, accData);
 
             isEnd = (Boolean) meta.get("is_end");
-            ++page;
         }
     }
 
