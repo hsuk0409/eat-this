@@ -74,11 +74,16 @@ public class KakaoApiService {
                     .replaceQueryParam("page", page++)
                     .encode(StandardCharsets.UTF_8)
                     .build().toUri();
-            responseEntity = restTemplate.exchange(
-                    uri, HttpMethod.GET, new HttpEntity<>(null, headers), Object.class);
-            bodyMap = objectMapper.convertValue(responseEntity.getBody(), new TypeReference<>() {});
-            documents = objectMapper.convertValue(bodyMap.get("documents"), new TypeReference<>() {});
-            meta = objectMapper.convertValue(bodyMap.get("meta"), new TypeReference<>() {});
+            try {
+                responseEntity = restTemplate.exchange(
+                        uri, HttpMethod.GET, new HttpEntity<>(null, headers), Object.class);
+                bodyMap = objectMapper.convertValue(responseEntity.getBody(), new TypeReference<>() {});
+                documents = objectMapper.convertValue(bodyMap.get("documents"), new TypeReference<>() {});
+                meta = objectMapper.convertValue(bodyMap.get("meta"), new TypeReference<>() {});
+            } catch (Exception ex) {
+                log.error(String.format("전체 스토어 조회 중 에러 발생!! 메세지: %s", ex.getMessage()));
+                continue;
+            }
 
             convertAndSaveSearchResponseDto(documents, accData);
 
