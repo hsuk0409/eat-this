@@ -1,8 +1,8 @@
-package com.eatthis.eatthis.web.api.service;
+package com.eatthis.web.api.service;
 
-import com.eatthis.eatthis.web.location.domain.LocationCategory;
-import com.eatthis.eatthis.web.location.domain.LocationCategoryData;
-import com.eatthis.eatthis.web.location.dto.KakaoSearchResponseDto;
+import com.eatthis.web.location.domain.LocationCategory;
+import com.eatthis.web.location.domain.LocationCategoryData;
+import com.eatthis.web.location.dto.KakaoSearchResponseDto;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;

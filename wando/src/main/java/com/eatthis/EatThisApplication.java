@@ -1,4 +1,4 @@
-package com.eatthis.eatthis;
+package com.eatthis;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

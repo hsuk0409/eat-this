@@ -1,4 +1,4 @@
-package com.eatthis.eatthis.web.location;
+package com.eatthis.web;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,25 +13,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class LocationControllerTest {
+class HealthCheckControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @DisplayName("카카오 검색 API 사용하여 삼평동 주위 음식점을 조회한다.")
+    @DisplayName("웹 서버 상태 체크 컨트롤러 호출하기")
     @Test
-    void kakaoSearchApiTest() throws Exception {
-        //given
-        String lng = "127.110385";
-        String lat = "37.4012017";
-        int radius = 100;
-
-        //when & then
-        mockMvc.perform(get("/api/v1/locations/circle")
-                        .param("lng", lng)
-                        .param("lat", lat)
-                        .param("radius", String.valueOf(radius))
-                )
+    void healthCheckTest() throws Exception {
+        mockMvc.perform(get("/healthCheck"))
                 .andDo(print())
                 .andExpect(status().isOk())
         ;

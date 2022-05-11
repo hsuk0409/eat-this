@@ -1,6 +1,6 @@
-package com.eatthis.eatthis.web.location.dto;
+package com.eatthis.web.location.dto;
 
-import com.eatthis.eatthis.web.location.domain.LocationCategory;
+import com.eatthis.web.location.domain.LocationCategory;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

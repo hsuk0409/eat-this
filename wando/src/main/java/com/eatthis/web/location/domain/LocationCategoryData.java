@@ -1,4 +1,4 @@
-package com.eatthis.eatthis.web.location.domain;
+package com.eatthis.web.location.domain;
 
 import lombok.Getter;
 
