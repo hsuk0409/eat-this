@@ -1,4 +1,4 @@
-package com.eatthis.web.location;
+package com.eatthis.web.location.controller;
 
 import com.eatthis.web.api.service.KakaoApiService;
 import com.eatthis.web.location.domain.LocationCategoryData;
