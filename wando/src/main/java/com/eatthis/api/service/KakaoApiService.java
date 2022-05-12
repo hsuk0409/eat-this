@@ -1,4 +1,4 @@
-package com.eatthis.web.api.service;
+package com.eatthis.api.service;
 
 import com.eatthis.web.location.domain.LocationCategory;
 import com.eatthis.web.location.domain.LocationCategoryData;

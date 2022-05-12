@@ -1,6 +1,6 @@
-package com.eatthis.web.location.controller;
+package com.eatthis.web.location;
 
-import com.eatthis.web.api.service.KakaoApiService;
+import com.eatthis.api.service.KakaoApiService;
 import com.eatthis.web.location.domain.LocationCategoryData;
 import com.eatthis.web.location.dto.KakaoSearchResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -20,13 +20,13 @@ public class LocationController {
 
     private final KakaoApiService kakaoApiService;
 
-    @GetMapping(value = "/locations/circle")
+    @GetMapping(path = "/locations/circle")
     public ResponseEntity<List<KakaoSearchResponseDto>> getStores(@RequestParam(value = "keyword", required = false) String keyword,
-                                                                 @RequestParam(value = "category", required = false,
-                                                                    defaultValue = "FOOD") LocationCategoryData category,
-                                                                 @RequestParam(value = "lng") String longitude,
-                                                                 @RequestParam(value = "lat") String latitude,
-                                                                 @RequestParam(value = "radius") int radius) {
+                                                                  @RequestParam(value = "category", required = false,
+                                                                          defaultValue = "FOOD") LocationCategoryData category,
+                                                                  @RequestParam(value = "lng") String longitude,
+                                                                  @RequestParam(value = "lat") String latitude,
+                                                                  @RequestParam(value = "radius") int radius) {
         if (ObjectUtils.isEmpty(keyword)) {
             keyword = category.getDescription();
         }
