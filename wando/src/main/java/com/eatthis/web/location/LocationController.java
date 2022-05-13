@@ -20,7 +20,7 @@ public class LocationController {
 
     private final KakaoApiService kakaoApiService;
 
-    @GetMapping(path = "/locations/circle")
+    @GetMapping("/locations/circle")
     public ResponseEntity<List<KakaoSearchResponseDto>> getStores(@RequestParam(value = "keyword", required = false) String keyword,
                                                                   @RequestParam(value = "category", required = false,
                                                                           defaultValue = "FOOD") LocationCategoryData category,
