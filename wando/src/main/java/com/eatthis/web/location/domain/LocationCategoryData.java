@@ -5,6 +5,9 @@ import lombok.Getter;
 @Getter
 public enum LocationCategoryData {
 
+    SUPERMARKET("MT1", "대형마트"),
+    CONVENIENCE_STORE("CS2", "편의점"),
+    CAFE("CE7", "카페"),
     FOOD("FD6", "음식점")
     ;
 
