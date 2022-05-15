@@ -18,16 +18,17 @@ class LocationControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @DisplayName("카카오 검색 API 사용하여 삼평동 주위 음식점을 조회한다.")
+    @DisplayName("카카오 검색 API 사용하여 특정 위치의 주변 음식점을 조회한다.")
     @Test
     void kakaoSearchApiTest() throws Exception {
         //given
-        String lng = "127.110385";
-        String lat = "37.4012017";
-        int radius = 100;
+        String lng = "127.04138946025049";
+        String lat = "37.51805678063371";
+        int radius = 500;
 
         //when & then
         mockMvc.perform(get("/locations/circle")
+                        .param("category", "FOOD")
                         .param("lng", lng)
                         .param("lat", lat)
                         .param("radius", String.valueOf(radius))
