@@ -20,8 +20,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -48,7 +50,9 @@ public class KakaoApiService {
 
         searchAllStoreInRange(uriComponentsBuilder, responseDtos);
 
-        return responseDtos;
+        return responseDtos.stream()
+                .sorted(Comparator.comparing(KakaoSearchResponseDto::getDistance))
+                .collect(Collectors.toList());
     }
 
     private void searchAllStoreInRange(UriComponentsBuilder uriComponentsBuilder, List<KakaoSearchResponseDto> accData) {
