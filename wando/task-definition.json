@@ -9,7 +9,7 @@
         "logDriver": "awslogs",
         "secretOptions": null,
         "options": {
-          "awslogs-group": "/ecs/eat-this-dev",
+          "awslogs-group": "/ecs/eat-this-prod",
           "awslogs-region": "ap-northeast-2",
           "awslogs-stream-prefix": "ecs"
         }
@@ -37,7 +37,7 @@
       "memoryReservation": null,
       "volumesFrom": [],
       "stopTimeout": null,
-      "image": "439604610324.dkr.ecr.ap-northeast-2.amazonaws.com/eat-this-dev:latest",
+      "image": "439604610324.dkr.ecr.ap-northeast-2.amazonaws.com/eat-this-prod:latest",
       "startTimeout": null,
       "firelensConfiguration": null,
       "dependsOn": null,
@@ -54,18 +54,18 @@
       "dockerLabels": null,
       "systemControls": null,
       "privileged": null,
-      "name": "eat-this-dev"
+      "name": "eat-this-prod"
     }
   ],
   "placementConstraints": [],
-  "memory": "512",
+  "memory": "2048",
   "taskRoleArn": "arn:aws:iam::439604610324:role/ecsTaskExecutionRole",
   "compatibilities": [
     "EC2",
     "FARGATE"
   ],
-  "taskDefinitionArn": "arn:aws:ecs:ap-northeast-2:439604610324:task-definition/eat-this-dev:4",
-  "family": "eat-this-dev",
+  "taskDefinitionArn": "arn:aws:ecs:ap-northeast-2:439604610324:task-definition/eat-this-prod:1",
+  "family": "eat-this-prod",
   "requiresAttributes": [
     {
       "targetId": null,
@@ -121,9 +121,12 @@
     "FARGATE"
   ],
   "networkMode": "awsvpc",
-  "runtimePlatform": null,
-  "cpu": "256",
-  "revision": 4,
+  "runtimePlatform": {
+    "operatingSystemFamily": "LINUX",
+    "cpuArchitecture": null
+  },
+  "cpu": "1024",
+  "revision": 1,
   "status": "ACTIVE",
   "inferenceAccelerators": null,
   "proxyConfiguration": null,
