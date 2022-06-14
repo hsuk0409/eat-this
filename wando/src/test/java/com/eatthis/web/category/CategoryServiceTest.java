@@ -1,6 +1,7 @@
 package com.eatthis.web.category;
 
 import com.eatthis.api.service.KakaoApiService;
+import com.eatthis.web.category.dto.CategoryByStep;
 import com.eatthis.web.location.domain.LocationCategoryData;
 import com.eatthis.web.location.dto.KakaoSearchResponseDto;
 import org.junit.jupiter.api.DisplayName;
@@ -32,7 +33,7 @@ public class CategoryServiceTest {
 
         //when
         System.out.println(radius);
-        
+        List<CategoryByStep> categoriesByStep = categoryService.subdivideCategoriesByStep(categories);
 
         //then
     }
