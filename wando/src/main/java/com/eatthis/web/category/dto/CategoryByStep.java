@@ -1,6 +1,5 @@
 package com.eatthis.web.category.dto;
 
-import com.eatthis.web.location.domain.LocationCategory;
 import com.eatthis.web.location.dto.KakaoSearchResponseDto;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,11 +26,11 @@ public class CategoryByStep {
     }
 
     public void addAllSearchData(List<KakaoSearchResponseDto> searchResponseDtos) {
-        this.kakaoSearchResponseDtos = searchResponseDtos;
+        this.kakaoSearchResponseDtos.addAll(searchResponseDtos);
     }
 
-    public void isLastLevel() {
-        this.lastLevel = true;
+    public void isLastLevel(boolean lastLevel) {
+        this.lastLevel = lastLevel;
     }
 
 }
