@@ -32,7 +32,6 @@ public class CategoryServiceTest {
                 .getStoresByCircle(food.getDescription(), food, lng, lat, radius);
 
         //when
-        System.out.println(radius);
         List<CategoryByStep> categoriesByStep = categoryService.subdivideCategoriesByStep(categories);
 
         //then
