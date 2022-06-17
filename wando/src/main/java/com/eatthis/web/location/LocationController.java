@@ -1,6 +1,8 @@
 package com.eatthis.web.location;
 
 import com.eatthis.api.service.KakaoApiService;
+import com.eatthis.web.category.CategoryService;
+import com.eatthis.web.category.dto.CategoryByStep;
 import com.eatthis.web.location.domain.LocationCategoryData;
 import com.eatthis.web.location.dto.KakaoSearchResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LocationController {
 
+    private final CategoryService categoryService;
     private final KakaoApiService kakaoApiService;
 
     @GetMapping("/locations/circle")
@@ -34,6 +37,24 @@ public class LocationController {
         List<KakaoSearchResponseDto> responseDtos = kakaoApiService.getStoresByCircle(keyword, category, longitude, latitude, radius);
 
         return ResponseEntity.ok().body(responseDtos);
+    }
+
+    @GetMapping("/locations/circle/category")
+    public ResponseEntity<List<CategoryByStep>> getLocationsCategoriesByStep(@RequestParam(value = "keyword", required = false) String keyword,
+                                                                             @RequestParam(value = "category", required = false,
+                                                                                     defaultValue = "FOOD") LocationCategoryData category,
+                                                                             @RequestParam(value = "lng") String longitude,
+                                                                             @RequestParam(value = "lat") String latitude,
+                                                                             @RequestParam(value = "radius") int radius) {
+
+        if (ObjectUtils.isEmpty(keyword)) {
+            keyword = category.getDescription();
+        }
+
+        List<KakaoSearchResponseDto> responseDtos = kakaoApiService.getStoresByCircle(keyword, category, longitude, latitude, radius);
+        List<CategoryByStep> categoriesByStep = categoryService.subdivideCategoriesByStep(responseDtos);
+
+        return ResponseEntity.ok().body(categoriesByStep);
     }
 
 }

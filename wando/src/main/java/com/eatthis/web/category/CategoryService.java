@@ -19,6 +19,9 @@ import java.util.Map;
 public class CategoryService {
 
     public List<CategoryByStep> subdivideCategoriesByStep(List<KakaoSearchResponseDto> categories) {
+        if (ObjectUtils.isEmpty(categories)) {
+            return new ArrayList<>();
+        }
         Map<String, List<KakaoSearchResponseDto>> categoriesByStep = new HashMap<>();
         setMapCategoryToStep(categories, categoriesByStep);
 
