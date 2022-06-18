@@ -18,21 +18,15 @@ public class CategoryByStep {
     private int step;
     private final List<KakaoSearchResponseDto> kakaoSearchResponseDtos = new ArrayList<>();
     private final List<CategoryByStep> subSteps = new ArrayList<>();
-    private boolean lastLevel;
 
     @Builder
-    public CategoryByStep(String categoryName, int step, boolean lastLevel) {
+    public CategoryByStep(String categoryName, int step) {
         this.categoryName = categoryName;
         this.step = step;
-        this.lastLevel = lastLevel;
     }
 
     public void addAllSearchData(List<KakaoSearchResponseDto> searchResponseDtos) {
         this.kakaoSearchResponseDtos.addAll(searchResponseDtos);
-    }
-
-    public void isLastLevel(boolean lastLevel) {
-        this.lastLevel = lastLevel;
     }
 
     public void updateSubStepCategory(String categoryName) {

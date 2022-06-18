@@ -60,12 +60,10 @@ public class CategoryService {
             String[] categorySplit = locationCategory.getFullName().split(">");
             for (int i = 1; categorySplit.length > 0 && i < categorySplit.length; ++i) {
                 String categoryName = categorySplit[i].trim();
-                boolean isLastLevel = i == (categorySplit.length - 1);
                 CategoryByStep alreadySavedCategory = alreadySaved.get(categoryName);
                 CategoryByStep newCategory = CategoryByStep.builder()
                         .step(i)
                         .categoryName(categoryName)
-                        .lastLevel(isLastLevel)
                         .build();
 
                 if (ObjectUtils.isEmpty(alreadySavedCategory)) {
