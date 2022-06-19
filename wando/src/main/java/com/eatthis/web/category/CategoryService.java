@@ -52,37 +52,34 @@ public class CategoryService {
     private void setCategoriesAsMappedStepByCategory(List<KakaoSearchResponseDto> categories,
                                                      Map<String, List<KakaoSearchResponseDto>> categoriesByStep,
                                                      List<CategoryByStep> result) {
-        Map<CategoryByStep, List<CategoryByStep>> mapCategoryParentToChildes = new HashMap<>();
-        Map<String, CategoryByStep> alreadySaved = new HashMap<>();
+
+        Map<String, CategoryByStep> memoryCheckAlreadySavedCategory = new HashMap<>();
 
         categories.forEach(category -> {
             LocationCategory locationCategory = category.getCategory();
             String[] categorySplit = locationCategory.getFullName().split(">");
             for (int i = 1; categorySplit.length > 0 && i < categorySplit.length; ++i) {
                 String categoryName = categorySplit[i].trim();
-                CategoryByStep alreadySavedCategory = alreadySaved.get(categoryName);
                 CategoryByStep newCategory = CategoryByStep.builder()
                         .step(i)
                         .categoryName(categoryName)
                         .build();
-
-                if (ObjectUtils.isEmpty(alreadySavedCategory)) {
+                CategoryByStep alreadySavedCategory = memoryCheckAlreadySavedCategory.get(categoryName);
+                if (ObjectUtils.isEmpty(alreadySavedCategory)) { // 최초 저장 카테고리
                     newCategory.addAllSearchData(categoriesByStep.get(categoryName));
-                    alreadySaved.put(categoryName, newCategory);
+                    memoryCheckAlreadySavedCategory.put(categoryName, newCategory);
 
                     if (i > 1) {
-                        CategoryByStep parentCategory = alreadySaved.get(categorySplit[i - 1].trim());
-                        parentCategory.addSubStepCategory(newCategory);
+                        CategoryByStep parentStepCategory = memoryCheckAlreadySavedCategory.get(categorySplit[i - 1].trim());
+                        parentStepCategory.addSubStepCategory(newCategory);
                     } else {
                         result.add(newCategory);
-                        mapCategoryParentToChildes.put(newCategory, newCategory.getSubSteps());
                     }
-
-                } else {
-                    if (i > 1) {
-                        CategoryByStep parentCategory = alreadySaved.get(categorySplit[i - 1].trim());
-                        if (!ObjectUtils.isEmpty(parentCategory)) {
-                            parentCategory.addSubStepCategory(newCategory);
+                } else { // 이미 한번이상 저장된 카테고리
+                    if (i > 1) { // 1단계 이상일 경우
+                        CategoryByStep parentStepCategory = memoryCheckAlreadySavedCategory.get(categorySplit[i - 1].trim());
+                        if (!ObjectUtils.isEmpty(parentStepCategory)) {
+                            parentStepCategory.addSubStepCategory(newCategory);
                         }
                     }
                 }
