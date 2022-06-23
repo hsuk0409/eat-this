@@ -57,4 +57,12 @@ public class LocationController {
         return ResponseEntity.ok().body(categoriesByStep);
     }
 
+    @GetMapping("/locations/rectangle")
+    public ResponseEntity<List<KakaoSearchResponseDto>> getStoresByRectangle(@RequestParam(value = "keyword", required = false) String keyword,
+                                                                             @RequestParam(value = "category", required = false,
+                                                                                     defaultValue = "FOOD") LocationCategoryData category,
+                                                                             @RequestParam(value = "rectCoordinate") String rect) {
+        return ResponseEntity.ok().body(null);
+    }
+
 }
