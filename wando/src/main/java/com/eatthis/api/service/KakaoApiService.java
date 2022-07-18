@@ -113,4 +113,8 @@ public class KakaoApiService {
                     .build());
         }
     }
+
+    public List<String> getImagesByKeyword(List<String> storeNames) {
+        return null;
+    }
 }

@@ -65,4 +65,10 @@ public class LocationController {
         return ResponseEntity.ok().body(null);
     }
 
+    @GetMapping("/locations/images")
+    public ResponseEntity<List<String>> getStoreImages(@RequestParam(value = "storeNames") List<String> storeNames) {
+
+        return ResponseEntity.ok().body(kakaoApiService.getImagesByKeyword(storeNames));
+    }
+
 }
