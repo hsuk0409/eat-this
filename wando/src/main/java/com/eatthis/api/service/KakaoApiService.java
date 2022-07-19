@@ -115,6 +115,23 @@ public class KakaoApiService {
     }
 
     public List<String> getImagesByKeyword(List<String> storeNames) {
-        return null;
+        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(KAKAO_HOST + "/v2/search/image");
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(HttpHeaders.AUTHORIZATION, "KakaoAK " + KAKAO_REST_API_KEY);
+
+        List<String> results = new ArrayList<>();
+        for (String storeName : storeNames) {
+            URI uri = uriComponentsBuilder.queryParam("query", storeName)
+                    .encode(StandardCharsets.UTF_8)
+                    .build().toUri();
+            ResponseEntity<Object> responseEntity = restTemplate.exchange(
+                    uri, HttpMethod.GET, new HttpEntity<>(null, headers), Object.class);
+            Map<String, Object> bodyMap = objectMapper.convertValue(responseEntity.getBody(), new TypeReference<>() {});
+            List<Map<String, String>> documents = objectMapper.convertValue(bodyMap.get("documents"), new TypeReference<>() {});
+            Map<String, Object> meta = objectMapper.convertValue(bodyMap.get("meta"), new TypeReference<>() {});
+
+        }
+
+        return results;
     }
 }
