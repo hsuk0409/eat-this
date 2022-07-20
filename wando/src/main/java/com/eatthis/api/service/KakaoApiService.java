@@ -2,6 +2,8 @@ package com.eatthis.api.service;
 
 import com.eatthis.web.location.domain.LocationCategory;
 import com.eatthis.web.location.domain.LocationCategoryData;
+import com.eatthis.web.location.dto.KakaoSearchImageDto;
+import com.eatthis.web.location.dto.KakaoSearchImageResponseDto;
 import com.eatthis.web.location.dto.KakaoSearchResponseDto;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -114,12 +116,12 @@ public class KakaoApiService {
         }
     }
 
-    public List<String> getImagesByKeyword(List<String> storeNames) {
+    public KakaoSearchImageResponseDto getImagesByKeyword(List<String> storeNames) {
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(KAKAO_HOST + "/v2/search/image");
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.AUTHORIZATION, "KakaoAK " + KAKAO_REST_API_KEY);
 
-        List<String> results = new ArrayList<>();
+        List<KakaoSearchImageDto> results = new ArrayList<>();
         for (String storeName : storeNames) {
             URI uri = uriComponentsBuilder.queryParam("query", storeName)
                     .encode(StandardCharsets.UTF_8)
@@ -128,10 +130,17 @@ public class KakaoApiService {
                     uri, HttpMethod.GET, new HttpEntity<>(null, headers), Object.class);
             Map<String, Object> bodyMap = objectMapper.convertValue(responseEntity.getBody(), new TypeReference<>() {});
             List<Map<String, String>> documents = objectMapper.convertValue(bodyMap.get("documents"), new TypeReference<>() {});
-            Map<String, Object> meta = objectMapper.convertValue(bodyMap.get("meta"), new TypeReference<>() {});
 
+            if (!ObjectUtils.isEmpty(documents)) {
+                results.add(KakaoSearchImageDto.builder()
+                        .storeName(storeName)
+                        .imageUrls(documents.stream().limit(10).map(doc -> doc.get("image_url")).collect(Collectors.toList()))
+                        .build());
+            }
         }
 
-        return results;
+        return KakaoSearchImageResponseDto.builder()
+                .searchImageData(results)
+                .build();
     }
 }

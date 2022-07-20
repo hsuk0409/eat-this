@@ -4,6 +4,7 @@ import com.eatthis.api.service.KakaoApiService;
 import com.eatthis.web.category.CategoryService;
 import com.eatthis.web.category.dto.CategoryByStep;
 import com.eatthis.web.location.domain.LocationCategoryData;
+import com.eatthis.web.location.dto.KakaoSearchImageResponseDto;
 import com.eatthis.web.location.dto.KakaoSearchResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -66,7 +67,7 @@ public class LocationController {
     }
 
     @GetMapping("/locations/images")
-    public ResponseEntity<List<String>> getStoreImages(@RequestParam(value = "storeNames") List<String> storeNames) {
+    public ResponseEntity<KakaoSearchImageResponseDto> getStoreImages(@RequestParam(value = "storeNames") List<String> storeNames) {
 
         return ResponseEntity.ok().body(kakaoApiService.getImagesByKeyword(storeNames));
     }
