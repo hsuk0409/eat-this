@@ -123,7 +123,7 @@ public class KakaoApiService {
 
         List<KakaoSearchImageDto> results = new ArrayList<>();
         for (String storeName : storeNames) {
-            URI uri = uriComponentsBuilder.queryParam("query", storeName)
+            URI uri = uriComponentsBuilder.replaceQueryParam("query", storeName)
                     .encode(StandardCharsets.UTF_8)
                     .build().toUri();
             ResponseEntity<Object> responseEntity = restTemplate.exchange(
