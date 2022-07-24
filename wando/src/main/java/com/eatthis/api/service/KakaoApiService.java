@@ -130,11 +130,14 @@ public class KakaoApiService {
                     uri, HttpMethod.GET, new HttpEntity<>(null, headers), Object.class);
             Map<String, Object> bodyMap = objectMapper.convertValue(responseEntity.getBody(), new TypeReference<>() {});
             List<Map<String, String>> documents = objectMapper.convertValue(bodyMap.get("documents"), new TypeReference<>() {});
-
             if (!ObjectUtils.isEmpty(documents)) {
                 results.add(KakaoSearchImageDto.builder()
                         .storeName(storeName)
-                        .imageUrls(documents.stream().limit(10).map(doc -> doc.get("image_url")).collect(Collectors.toList()))
+                        .imageUrls(documents
+                                .stream()
+                                .limit(10)
+                                .map(doc -> doc.get("image_url"))
+                                .collect(Collectors.toList()))
                         .build());
             }
         }
