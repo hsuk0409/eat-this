@@ -37,13 +37,16 @@ public class KakaoSearchResponseDto {
     }
 
     private String setEupMyeonDongByAddress(String address) {
-        if (ObjectUtils.isEmpty(address)) {
-            return "내주변"; // 혹시나 주소 없을 경우 기존 텍스트 반환
+        if (!ObjectUtils.isEmpty(address)) {
+            String[] addressWords = address.split(" ");
+            for (int i = addressWords.length - 1; i >= 0; --i) {
+                if (!addressWords[i].matches(".*\\d.*")) {
+                    return addressWords[i];
+                }
+            }
         }
 
-        // TODO Biz logic
-        
-        return null;
+        return "내주변";
     }
 
 }
