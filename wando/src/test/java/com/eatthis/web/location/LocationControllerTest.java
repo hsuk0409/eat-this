@@ -22,8 +22,8 @@ class LocationControllerTest {
     @Test
     void kakaoSearchApiTest() throws Exception {
         //given
-        String lng = "127.04138946025049";
-        String lat = "37.51805678063371";
+        String lat = "35.79428711697479";
+        String lng = "127.15892066580103";
         int radius = 500;
 
         //when & then
