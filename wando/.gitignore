@@ -37,5 +37,3 @@ out/
 .vscode/
 
 application-env.properties
-
-task-definition.json
