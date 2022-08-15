@@ -40,8 +40,14 @@ public class KakaoSearchResponseDto {
         if (!ObjectUtils.isEmpty(address)) {
             String[] addressWords = address.split(" ");
             for (int i = addressWords.length - 1; i >= 0; --i) {
-                if (!addressWords[i].matches(".*\\d.*")) {
-                    return addressWords[i];
+                String addressWord = addressWords[i];
+                char lastWordChar = addressWord.charAt(addressWord.length() - 1);
+                String lastWordString = String.valueOf(lastWordChar);
+                boolean isEupMyeonDong = lastWordString.equals("읍") ||
+                        lastWordString.equals("면") ||
+                        lastWordString.equals("동");
+                if (isEupMyeonDong || !addressWord.matches(".*\\d.*")) {
+                    return addressWord;
                 }
             }
         }
