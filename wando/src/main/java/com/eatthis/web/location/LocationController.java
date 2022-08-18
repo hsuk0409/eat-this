@@ -63,7 +63,12 @@ public class LocationController {
                                                                              @RequestParam(value = "category", required = false,
                                                                                      defaultValue = "FOOD") LocationCategoryData category,
                                                                              @RequestParam(value = "rectCoordinate") String rect) {
-        return ResponseEntity.ok().body(null);
+        if (ObjectUtils.isEmpty(keyword)) {
+            keyword = category.getDescription();
+        }
+        List<KakaoSearchResponseDto> responseDtos = kakaoApiService.getStoresByRetangle(keyword, category, rect);
+
+        return ResponseEntity.ok().body(responseDtos);
     }
 
     @GetMapping("/locations/images")

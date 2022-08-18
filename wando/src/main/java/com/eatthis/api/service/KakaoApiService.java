@@ -57,6 +57,21 @@ public class KakaoApiService {
                 .collect(Collectors.toList());
     }
 
+    public List<KakaoSearchResponseDto> getStoresByRetangle(String keyword, LocationCategoryData category, String rect) {
+        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(KAKAO_HOST + "/v2/local/search/keyword")
+                .queryParam("query", keyword)
+                .queryParam("category_group_code", category.getCode())
+                .queryParam("rect", rect);
+
+        List<KakaoSearchResponseDto> responseDtos = new ArrayList<>();
+
+        searchAllStoreInRange(uriComponentsBuilder, responseDtos);
+
+        return responseDtos.stream()
+                .sorted(Comparator.comparing(KakaoSearchResponseDto::getDistance))
+                .collect(Collectors.toList());
+    }
+
     private void searchAllStoreInRange(UriComponentsBuilder uriComponentsBuilder, List<KakaoSearchResponseDto> accData) {
         URI uri = uriComponentsBuilder
                 .encode(StandardCharsets.UTF_8)
