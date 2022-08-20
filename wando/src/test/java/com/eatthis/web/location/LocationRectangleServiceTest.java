@@ -1,10 +1,16 @@
 package com.eatthis.web.location;
 
 import com.eatthis.api.service.KakaoApiService;
+import com.eatthis.web.location.domain.LocationCategoryData;
+import com.eatthis.web.location.dto.KakaoSearchResponseDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 public class LocationRectangleServiceTest {
@@ -16,8 +22,15 @@ public class LocationRectangleServiceTest {
     @Test
     void getStoresByRectangleRangeTest() {
         //given
+        String rect = "127.112597264,37.398321708,127.108383849,37.404448936";
+        LocationCategoryData foodCategory = LocationCategoryData.FOOD;
+
         //when
+        List<KakaoSearchResponseDto> storesByRectangle = kakaoApiService
+                .getStoresByRectangle(foodCategory.getDescription(), foodCategory, rect);
+
         //then
+        assertThat(storesByRectangle).isNotEmpty();
     }
 
 }
