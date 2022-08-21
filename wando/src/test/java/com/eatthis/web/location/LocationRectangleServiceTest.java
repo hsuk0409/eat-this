@@ -31,6 +31,7 @@ public class LocationRectangleServiceTest {
 
         //then
         assertThat(storesByRectangle).isNotEmpty();
+        // TODO 해당 위치 데이터 주소로 제대로 가져오는지 확인 필요
     }
 
 }
