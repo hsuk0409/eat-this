@@ -71,6 +71,21 @@ public class LocationController {
         return ResponseEntity.ok().body(responseDtos);
     }
 
+    @GetMapping("/locations/rectangle/category")
+    public ResponseEntity<List<CategoryByStep>> getLocationCategoriesByRectangle(@RequestParam(value = "keyword", required = false) String keyword,
+                                                                                 @RequestParam(value = "category", required = false,
+                                                                                         defaultValue = "FOOD") LocationCategoryData category,
+                                                                                 @RequestParam(value = "rectCoordinate") String rect) {
+        if (ObjectUtils.isEmpty(keyword)) {
+            keyword = category.getDescription();
+        }
+
+        List<KakaoSearchResponseDto> responseDtos = kakaoApiService.getStoresByRectangle(keyword, category, rect);
+        List<CategoryByStep> categoriesByStep = categoryService.subdivideCategoriesByStep(responseDtos);
+
+        return ResponseEntity.ok().body(categoriesByStep);
+    }
+
     @GetMapping("/locations/images")
     public ResponseEntity<KakaoSearchImageResponseDto> getStoreImages(@RequestParam(value = "storeNames") List<String> storeNames) {
 
