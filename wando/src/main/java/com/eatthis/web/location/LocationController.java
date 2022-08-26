@@ -66,6 +66,7 @@ public class LocationController {
         if (ObjectUtils.isEmpty(keyword)) {
             keyword = category.getDescription();
         }
+
         List<KakaoSearchResponseDto> responseDtos = kakaoApiService.getStoresByRectangle(keyword, category, rect);
 
         return ResponseEntity.ok().body(responseDtos);

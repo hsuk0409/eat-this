@@ -58,6 +58,10 @@ public class KakaoApiService {
     }
 
     public List<KakaoSearchResponseDto> getStoresByRectangle(String keyword, LocationCategoryData category, String rect) {
+        if (rect.split(",").length != 4) {
+            throw new IllegalStateException(String.format("위치 데이터는 좌측의 lng,lat / 우측의 lng,lat 4개가 필요합니다. 요청 데이터: [%s]", rect));
+        }
+
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(KAKAO_HOST + "/v2/local/search/keyword")
                 .queryParam("query", keyword)
                 .queryParam("category_group_code", category.getCode())
