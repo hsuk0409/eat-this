@@ -20,7 +20,7 @@ class LocationControllerTest {
 
     @DisplayName("카카오 검색 API 사용하여 특정 위치의 주변 음식점을 조회한다.")
     @Test
-    void kakaoSearchApiTest() throws Exception {
+    void kakaoSearchApiByCircleTest() throws Exception {
         //given
         String lat = "35.79428711697479";
         String lng = "127.15892066580103";
@@ -32,6 +32,38 @@ class LocationControllerTest {
                         .param("lng", lng)
                         .param("lat", lat)
                         .param("radius", String.valueOf(radius))
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+        ;
+    }
+
+    @DisplayName("카카오 검색 API 사용하여 사각형 위치의 주변 음식점을 조회한다.")
+    @Test
+    void kakaoSearchApiByRectTest() throws Exception {
+        //given
+        String rect = "127.112597264,37.398321708,127.108383849,37.404448936";
+
+        //when & then
+        mockMvc.perform(get("/locations/rectangle")
+                        .param("category", "FOOD")
+                        .param("rectCoordinate", rect)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+        ;
+    }
+
+    @DisplayName("사각형 위치의 주변 카테고리화 된 음식점을 조회한다.")
+    @Test
+    void getStoresByCategoryStepByRectTest() throws Exception {
+        //given
+        String rect = "127.112597264,37.398321708,127.108383849,37.404448936";
+
+        //when & then
+        mockMvc.perform(get("/locations/rectangle/category")
+                        .param("category", "FOOD")
+                        .param("rectCoordinate", rect)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
