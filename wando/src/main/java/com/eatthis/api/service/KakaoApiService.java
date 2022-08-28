@@ -1,5 +1,7 @@
 package com.eatthis.api.service;
 
+import com.eatthis.handler.exception.CustomException;
+import com.eatthis.handler.exception.ErrorCode;
 import com.eatthis.web.location.domain.LocationCategory;
 import com.eatthis.web.location.domain.LocationCategoryData;
 import com.eatthis.web.location.dto.KakaoSearchImageDto;
@@ -58,8 +60,11 @@ public class KakaoApiService {
     }
 
     public List<KakaoSearchResponseDto> getStoresByRectangle(String keyword, LocationCategoryData category, String rect) {
-        if (rect.split(",").length != 4) {
-            throw new IllegalStateException(String.format("위치 데이터는 좌측의 lng,lat / 우측의 lng,lat 4개가 필요합니다. 요청 데이터: [%s]", rect));
+        String[] coordinates = rect.split(",");
+        ErrorCode errorCode = ErrorCode.PARAMETER_IS_REQUIRED;
+        if (coordinates.length != 4) {
+            errorCode.setCustomDetail("사각형 지정 범위에는 ','로 구분해서 (좌)lng,lat,(우)lng,lat 4개의 좌표만 필요합니다.");
+            throw new CustomException(errorCode);
         }
 
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(KAKAO_HOST + "/v2/local/search/keyword")
