@@ -60,12 +60,7 @@ public class KakaoApiService {
     }
 
     public List<KakaoSearchResponseDto> getStoresByRectangle(String keyword, LocationCategoryData category, String rect) {
-        String[] coordinates = rect.split(",");
-        ErrorCode errorCode = ErrorCode.PARAMETER_IS_REQUIRED;
-        if (coordinates.length != 4) {
-            errorCode.setCustomDetail("사각형 지정 범위에는 ','로 구분해서 (좌)lng,lat,(우)lng,lat 4개의 좌표만 필요합니다.");
-            throw new CustomException(errorCode);
-        }
+        validationRectagleCoordinate(rect);
 
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(KAKAO_HOST + "/v2/local/search/keyword")
                 .queryParam("query", keyword)
@@ -79,6 +74,15 @@ public class KakaoApiService {
         return responseDtos.stream()
                 .sorted(Comparator.comparing(KakaoSearchResponseDto::getDistance))
                 .collect(Collectors.toList());
+    }
+
+    private void validationRectagleCoordinate(String rect) {
+        String[] coordinates = rect.split(",");
+        ErrorCode errorCode = ErrorCode.PARAMETER_IS_REQUIRED;
+        if (coordinates.length != 4) {
+            errorCode.setCustomDetail("사각형 지정 범위에는 ','로 구분해서 (좌)lng,lat,(우)lng,lat 4개의 좌표만 필요합니다.");
+            throw new CustomException(errorCode);
+        }
     }
 
     private void searchAllStoreInRange(UriComponentsBuilder uriComponentsBuilder, List<KakaoSearchResponseDto> accData) {
