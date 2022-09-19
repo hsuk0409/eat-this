@@ -4,8 +4,7 @@ import com.eatthis.api.service.KakaoApiService;
 import com.eatthis.web.category.CategoryService;
 import com.eatthis.web.category.dto.CategoryByStep;
 import com.eatthis.web.location.domain.LocationCategoryData;
-import com.eatthis.web.location.dto.KakaoSearchImageResponseDto;
-import com.eatthis.web.location.dto.KakaoSearchResponseDto;
+import com.eatthis.web.location.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +21,7 @@ import java.util.List;
 public class LocationController {
 
     private final CategoryService categoryService;
+    private final LocationSearchService locationSearchService;
     private final KakaoApiService kakaoApiService;
 
     @GetMapping("/locations/circle")
@@ -31,6 +31,7 @@ public class LocationController {
                                                                   @RequestParam(value = "lng") String longitude,
                                                                   @RequestParam(value = "lat") String latitude,
                                                                   @RequestParam(value = "radius") int radius) {
+
         if (ObjectUtils.isEmpty(keyword)) {
             keyword = category.getDescription();
         }
@@ -63,6 +64,7 @@ public class LocationController {
                                                                              @RequestParam(value = "category", required = false,
                                                                                      defaultValue = "FOOD") LocationCategoryData category,
                                                                              @RequestParam(value = "rectCoordinate") String rect) {
+
         if (ObjectUtils.isEmpty(keyword)) {
             keyword = category.getDescription();
         }
@@ -77,6 +79,7 @@ public class LocationController {
                                                                                  @RequestParam(value = "category", required = false,
                                                                                          defaultValue = "FOOD") LocationCategoryData category,
                                                                                  @RequestParam(value = "rectCoordinate") String rect) {
+
         if (ObjectUtils.isEmpty(keyword)) {
             keyword = category.getDescription();
         }
@@ -91,6 +94,28 @@ public class LocationController {
     public ResponseEntity<KakaoSearchImageResponseDto> getStoreImages(@RequestParam(value = "storeNames") List<String> storeNames) {
 
         return ResponseEntity.ok().body(kakaoApiService.getImagesByKeyword(storeNames));
+    }
+
+    @GetMapping("/locations/search")
+    public ResponseEntity<LocationSearchResponseDto> searchStoresByTown(StoresByTownSearchDto searchDto) {
+
+        searchDto.checkValidationParams();
+        searchDto.initParams();
+
+        List<LocationSearchDetail> searchDetails;
+        if (ObjectUtils.isEmpty(searchDto.getTown())) {
+            searchDetails = locationSearchService.searchStores(searchDto);
+        } else {
+            searchDetails = locationSearchService.searchStoresByTown(searchDto);
+        }
+
+        return ResponseEntity.ok()
+                .body(LocationSearchResponseDto.builder()
+                        .searchDetails(searchDetails)
+                        .page(searchDto.getPage())
+                        .size(searchDto.getSize())
+                        .build());
+
     }
 
 }

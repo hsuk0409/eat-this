@@ -60,7 +60,7 @@ public class KakaoApiService {
     }
 
     public List<KakaoSearchResponseDto> getStoresByRectangle(String keyword, LocationCategoryData category, String rect) {
-        validationRectagleCoordinate(rect);
+        validateRectangleCoordinate(rect);
 
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(KAKAO_HOST + "/v2/local/search/keyword")
                 .queryParam("query", keyword)
@@ -76,7 +76,7 @@ public class KakaoApiService {
                 .collect(Collectors.toList());
     }
 
-    private void validationRectagleCoordinate(String rect) {
+    private void validateRectangleCoordinate(String rect) {
         String[] coordinates = rect.split(",");
         ErrorCode errorCode = ErrorCode.PARAMETER_IS_REQUIRED;
         if (coordinates.length != 4) {
@@ -85,7 +85,8 @@ public class KakaoApiService {
         }
     }
 
-    private void searchAllStoreInRange(UriComponentsBuilder uriComponentsBuilder, List<KakaoSearchResponseDto> accData) {
+    private void searchAllStoreInRange(UriComponentsBuilder uriComponentsBuilder,
+                                       List<KakaoSearchResponseDto> accData) {
         URI uri = uriComponentsBuilder
                 .encode(StandardCharsets.UTF_8)
                 .build().toUri();
@@ -145,6 +146,14 @@ public class KakaoApiService {
     }
 
     public KakaoSearchImageResponseDto getImagesByKeyword(List<String> storeNames) {
+        List<KakaoSearchImageDto> results = getKakaoImageApiResults(storeNames);
+
+        return KakaoSearchImageResponseDto.builder()
+                .searchImageData(results)
+                .build();
+    }
+
+    private List<KakaoSearchImageDto> getKakaoImageApiResults(List<String> storeNames) {
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(KAKAO_HOST + "/v2/search/image");
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.AUTHORIZATION, "KakaoAK " + KAKAO_REST_API_KEY);
@@ -170,8 +179,6 @@ public class KakaoApiService {
             }
         }
 
-        return KakaoSearchImageResponseDto.builder()
-                .searchImageData(results)
-                .build();
+        return results;
     }
 }
