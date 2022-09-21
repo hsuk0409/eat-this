@@ -154,19 +154,9 @@ public class KakaoApiService {
     }
 
     private List<KakaoSearchImageDto> getKakaoImageApiResults(List<String> storeNames) {
-        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(KAKAO_HOST + "/v2/search/image");
-        HttpHeaders headers = new HttpHeaders();
-        headers.set(HttpHeaders.AUTHORIZATION, "KakaoAK " + KAKAO_REST_API_KEY);
-
         List<KakaoSearchImageDto> results = new ArrayList<>();
         for (String storeName : storeNames) {
-            URI uri = uriComponentsBuilder.replaceQueryParam("query", storeName)
-                    .encode(StandardCharsets.UTF_8)
-                    .build().toUri();
-            ResponseEntity<Object> responseEntity = restTemplate.exchange(
-                    uri, HttpMethod.GET, new HttpEntity<>(null, headers), Object.class);
-            Map<String, Object> bodyMap = objectMapper.convertValue(responseEntity.getBody(), new TypeReference<>() {});
-            List<Map<String, String>> documents = objectMapper.convertValue(bodyMap.get("documents"), new TypeReference<>() {});
+            List<Map<String, String>> documents = requestKakaoImageApi(storeName);
             if (!ObjectUtils.isEmpty(documents)) {
                 results.add(KakaoSearchImageDto.builder()
                         .storeName(storeName)
@@ -180,5 +170,31 @@ public class KakaoApiService {
         }
 
         return results;
+    }
+
+    public List<String> getImagesByKakaoApi(String storeName) {
+        List<Map<String, String>> documents = requestKakaoImageApi(storeName);
+        if (ObjectUtils.isEmpty(documents)) return new ArrayList<>();
+
+        return documents.stream()
+                .limit(10)
+                .filter(document -> !ObjectUtils.isEmpty(document.get("image_url")))
+                .map(document -> document.get("image_url"))
+                .collect(Collectors.toList());
+    }
+
+    private List<Map<String, String>> requestKakaoImageApi(String storeName) {
+        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(KAKAO_HOST + "/v2/search/image");
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(HttpHeaders.AUTHORIZATION, "KakaoAK " + KAKAO_REST_API_KEY);
+
+        URI uri = uriComponentsBuilder.replaceQueryParam("query", storeName)
+                .encode(StandardCharsets.UTF_8)
+                .build().toUri();
+        ResponseEntity<Object> responseEntity = restTemplate.exchange(
+                uri, HttpMethod.GET, new HttpEntity<>(null, headers), Object.class);
+        Map<String, Object> bodyMap = objectMapper.convertValue(responseEntity.getBody(), new TypeReference<>() {});
+
+        return objectMapper.convertValue(bodyMap.get("documents"), new TypeReference<>() {});
     }
 }

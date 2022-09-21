@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.util.ObjectUtils;
 
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
 public class KakaoSearchResponseDto {
@@ -55,4 +57,11 @@ public class KakaoSearchResponseDto {
         return "내주변";
     }
 
+    public LocationSearchDetail toSearchDetail(List<String> imagesByKakaoApi) {
+        return LocationSearchDetail.builder()
+                .storeName(this.placeName)
+                .categoryName(this.category.getGroupName())
+                .images(imagesByKakaoApi)
+                .build();
+    }
 }
