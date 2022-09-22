@@ -39,7 +39,7 @@ public class StoresByTownSearchDto {
             this.keyword = this.category.getDescription();
         }
         if (radius == 0) {
-            radius = 2000; // default 2KM
+            radius = 2000; // default 2km
         }
         if (page <= 0) {
             page = 1;
