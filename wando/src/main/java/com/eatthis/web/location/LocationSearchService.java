@@ -19,12 +19,14 @@ public class LocationSearchService {
     private final KakaoApiService kakaoApiService;
 
     public List<LocationSearchDetail> searchStores(StoresByTownSearchDto searchDto) {
-        List<KakaoSearchResponseDto> storesByCircle = kakaoApiService.getStoresByCircle(
+        List<KakaoSearchResponseDto> storesByCircle = kakaoApiService.getStoresPagingByCircle(
                 searchDto.getKeyword(),
                 searchDto.getCategory(),
                 searchDto.getLongitude(),
                 searchDto.getLatitude(),
-                searchDto.getRadius()
+                searchDto.getRadius(),
+                searchDto.getPage(),
+                searchDto.getSize()
         );
 
         return storesByCircle.stream()
