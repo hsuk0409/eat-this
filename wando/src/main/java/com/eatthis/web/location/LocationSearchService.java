@@ -1,6 +1,8 @@
 package com.eatthis.web.location;
 
 import com.eatthis.api.service.KakaoApiService;
+import com.eatthis.web.address.AddressService;
+import com.eatthis.web.address.dto.AddressCoordinate;
 import com.eatthis.web.location.dto.KakaoSearchResponseDto;
 import com.eatthis.web.location.dto.LocationSearchDetail;
 import com.eatthis.web.location.dto.StoresByTownSearchDto;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class LocationSearchService {
 
+    private final AddressService addressService;
     private final KakaoApiService kakaoApiService;
 
     public List<LocationSearchDetail> searchStores(StoresByTownSearchDto searchDto) {
@@ -37,7 +40,22 @@ public class LocationSearchService {
     }
 
     public List<LocationSearchDetail> searchStoresByTown(StoresByTownSearchDto searchDto) {
+        AddressCoordinate addressCoordinate = addressService.getCoordinateByTown(searchDto.getTown());
 
-        return null;
+        List<KakaoSearchResponseDto> storesByCircle = kakaoApiService.getStoresPagingByCircle(
+                searchDto.getKeyword(),
+                searchDto.getCategory(),
+                addressCoordinate.getLongitude(),
+                addressCoordinate.getLatitude(),
+                searchDto.getRadius(),
+                searchDto.getPage(),
+                searchDto.getSize()
+        );
+
+        return storesByCircle.stream()
+                .map(store -> store.toSearchDetail(
+                        kakaoApiService.getImagesByKakaoApi(store.getPlaceName()))
+                )
+                .collect(Collectors.toList());
     }
 }
