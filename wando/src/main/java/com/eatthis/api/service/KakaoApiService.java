@@ -7,6 +7,9 @@ import com.eatthis.web.location.domain.LocationCategoryData;
 import com.eatthis.web.location.dto.KakaoSearchImageDto;
 import com.eatthis.web.location.dto.KakaoSearchImageResponseDto;
 import com.eatthis.web.location.dto.KakaoSearchResponseDto;
+import com.eatthis.web.search.BlogSearchResponseDto;
+import com.eatthis.web.search.dto.BlogSearchResponseDto;
+import com.eatthis.web.search.dto.KakaoSearchBlogDto;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -62,7 +65,7 @@ public class KakaoApiService {
     public List<KakaoSearchResponseDto> getStoresPagingByCircle(String keyword, LocationCategoryData category,
                                                                 String longitude, String latitude, int radius,
                                                                 int page, int size) {
-        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(KAKAO_HOST + "/v2/local/search/keyword")
+        URI uri = UriComponentsBuilder.fromUriString(KAKAO_HOST + "/v2/local/search/keyword")
                 .queryParam("query", keyword)
                 .queryParam("category_group_code", category.getCode())
                 .queryParam("x", longitude)
@@ -70,15 +73,28 @@ public class KakaoApiService {
                 .queryParam("radius", radius)
                 .queryParam("page", page)
                 .queryParam("size", size)
-                ;
+                .encode(StandardCharsets.UTF_8)
+                .build().toUri();
 
         List<KakaoSearchResponseDto> responseDtos = new ArrayList<>();
 
-        searchAllStoreInRange(uriComponentsBuilder, responseDtos);
+        searchStoresPaging(uri, responseDtos);
 
         return responseDtos.stream()
                 .sorted(Comparator.comparing(KakaoSearchResponseDto::getDistance))
                 .collect(Collectors.toList());
+    }
+
+    private void searchStoresPaging(URI uri, List<KakaoSearchResponseDto> accData) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(HttpHeaders.AUTHORIZATION, "KakaoAK " + KAKAO_REST_API_KEY);
+
+        ResponseEntity<Object> responseEntity = restTemplate.exchange(
+                uri, HttpMethod.GET, new HttpEntity<>(null, headers), Object.class);
+        Map<String, Object> bodyMap = objectMapper.convertValue(responseEntity.getBody(), new TypeReference<>() {});
+        List<Map<String, String>> documents = objectMapper.convertValue(bodyMap.get("documents"), new TypeReference<>() {});
+
+        convertAndSaveSearchResponseDto(documents, accData);
     }
 
     public List<KakaoSearchResponseDto> getStoresByRectangle(String keyword, LocationCategoryData category, String rect) {
@@ -117,9 +133,12 @@ public class KakaoApiService {
 
         ResponseEntity<Object> responseEntity = restTemplate.exchange(
                 uri, HttpMethod.GET, new HttpEntity<>(null, headers), Object.class);
-        Map<String, Object> bodyMap = objectMapper.convertValue(responseEntity.getBody(), new TypeReference<>() {});
-        List<Map<String, String>> documents = objectMapper.convertValue(bodyMap.get("documents"), new TypeReference<>() {});
-        Map<String, Object> meta = objectMapper.convertValue(bodyMap.get("meta"), new TypeReference<>() {});
+        Map<String, Object> bodyMap = objectMapper.convertValue(responseEntity.getBody(), new TypeReference<>() {
+        });
+        List<Map<String, String>> documents = objectMapper.convertValue(bodyMap.get("documents"), new TypeReference<>() {
+        });
+        Map<String, Object> meta = objectMapper.convertValue(bodyMap.get("meta"), new TypeReference<>() {
+        });
 
         convertAndSaveSearchResponseDto(documents, accData);
 
@@ -133,9 +152,12 @@ public class KakaoApiService {
             try {
                 responseEntity = restTemplate.exchange(
                         uri, HttpMethod.GET, new HttpEntity<>(null, headers), Object.class);
-                bodyMap = objectMapper.convertValue(responseEntity.getBody(), new TypeReference<>() {});
-                documents = objectMapper.convertValue(bodyMap.get("documents"), new TypeReference<>() {});
-                meta = objectMapper.convertValue(bodyMap.get("meta"), new TypeReference<>() {});
+                bodyMap = objectMapper.convertValue(responseEntity.getBody(), new TypeReference<>() {
+                });
+                documents = objectMapper.convertValue(bodyMap.get("documents"), new TypeReference<>() {
+                });
+                meta = objectMapper.convertValue(bodyMap.get("meta"), new TypeReference<>() {
+                });
             } catch (Exception ex) {
                 log.error(String.format("전체 스토어 조회 중 에러 발생!! 메세지: %s", ex.getMessage()));
                 continue;
@@ -218,5 +240,38 @@ public class KakaoApiService {
         Map<String, Object> bodyMap = objectMapper.convertValue(responseEntity.getBody(), new TypeReference<>() {});
 
         return objectMapper.convertValue(bodyMap.get("documents"), new TypeReference<>() {});
+    }
+
+    public BlogSearchResponseDto getBlogsByKakaoApi(String placeName, String eupMyeonDong) {
+        URI uri = UriComponentsBuilder.fromUriString(KAKAO_HOST + "/v2/search/blog")
+                .queryParam("query", String.format("%s %S", placeName, eupMyeonDong))
+                .encode(StandardCharsets.UTF_8)
+                .build().toUri();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(HttpHeaders.AUTHORIZATION, "KakaoAK " + KAKAO_REST_API_KEY);
+
+        ResponseEntity<Object> responseEntity = restTemplate.exchange(
+                uri, HttpMethod.GET, new HttpEntity<>(null, headers), Object.class);
+        Map<String, Object> bodyMap = objectMapper.convertValue(responseEntity.getBody(), new TypeReference<>() {});
+        List<Map<String, String>> documentMaps = objectMapper.convertValue(bodyMap.get("documents"), new TypeReference<>() {});
+        Map<String, Object> metaMap = objectMapper.convertValue(bodyMap.get("meta"), new TypeReference<>() {});
+
+        try {
+            return BlogSearchResponseDto.builder()
+                    .blogDtos(documentMaps.stream()
+                            .map(document -> KakaoSearchBlogDto.builder()
+                                    .title(document.get("title"))
+                                    .contents(document.get("contents"))
+                                    .url(document.get("url"))
+                                    .blogName(document.get("blogname"))
+                                    .thumbnail(document.get("thumbnail"))
+                                    .build())
+                            .collect(Collectors.toList()))
+                    .totalCount((Integer) metaMap.get("total_count"))
+                    .build();
+        } catch (Exception ex) {
+            log.error("블로그 검색 데이터 변환 중 에러 발생! " + ex);
+            return null;
+        }
     }
 }

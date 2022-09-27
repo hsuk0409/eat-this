@@ -1,6 +1,7 @@
 package com.eatthis.web.location.dto;
 
 import com.eatthis.web.location.domain.LocationCategory;
+import com.eatthis.web.search.dto.BlogSearchResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -57,11 +58,13 @@ public class KakaoSearchResponseDto {
         return "내주변";
     }
 
-    public LocationSearchDetail toSearchDetail(List<String> imagesByKakaoApi) {
+    public LocationSearchDetail toSearchDetail(List<String> imagesByKakaoApi,
+                                               BlogSearchResponseDto blogResponseDto) {
         return LocationSearchDetail.builder()
                 .storeName(this.placeName)
                 .categoryName(this.category.getGroupName())
                 .images(imagesByKakaoApi)
+                .blogResponseDto(blogResponseDto)
                 .build();
     }
 }

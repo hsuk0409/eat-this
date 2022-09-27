@@ -4,13 +4,14 @@ import com.eatthis.handler.exception.CustomException;
 import com.eatthis.handler.exception.ErrorCode;
 import com.eatthis.web.location.domain.LocationCategoryData;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.util.ObjectUtils;
 
 import static com.eatthis.handler.exception.ErrorCode.INVALID_PARAMETER;
 
-@Getter
+@Getter @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class StoresByTownSearchDto {
@@ -38,11 +39,14 @@ public class StoresByTownSearchDto {
         if (ObjectUtils.isEmpty(this.keyword)) {
             this.keyword = this.category.getDescription();
         }
-        if (radius == 0) {
-            radius = 2000; // default 2km
+        if (this.radius == 0) {
+            this.radius = 2000; // default 2km
         }
-        if (page <= 0) {
-            page = 1;
+        if (this.page <= 0) {
+            this.page = 1;
+        }
+        if (this.size <= 0) {
+            this.size = 10;
         }
     }
 }

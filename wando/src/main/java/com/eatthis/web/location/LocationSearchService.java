@@ -33,8 +33,11 @@ public class LocationSearchService {
         );
 
         return storesByCircle.stream()
-                .map(store -> store.toSearchDetail(
-                        kakaoApiService.getImagesByKakaoApi(store.getPlaceName()))
+                .map(store ->
+                        store.toSearchDetail(
+                                kakaoApiService.getImagesByKakaoApi(store.getPlaceName()),
+                                kakaoApiService.getBlogsByKakaoApi(store.getPlaceName(), store.getEupMyeonDong())
+                        )
                 )
                 .collect(Collectors.toList());
     }
@@ -53,8 +56,11 @@ public class LocationSearchService {
         );
 
         return storesByCircle.stream()
-                .map(store -> store.toSearchDetail(
-                        kakaoApiService.getImagesByKakaoApi(store.getPlaceName()))
+                .map(store ->
+                        store.toSearchDetail(
+                                kakaoApiService.getImagesByKakaoApi(store.getPlaceName()),
+                                kakaoApiService.getBlogsByKakaoApi(store.getPlaceName(), store.getEupMyeonDong())
+                        )
                 )
                 .collect(Collectors.toList());
     }
