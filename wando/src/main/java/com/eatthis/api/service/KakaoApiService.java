@@ -7,7 +7,6 @@ import com.eatthis.web.location.domain.LocationCategoryData;
 import com.eatthis.web.location.dto.KakaoSearchImageDto;
 import com.eatthis.web.location.dto.KakaoSearchImageResponseDto;
 import com.eatthis.web.location.dto.KakaoSearchResponseDto;
-import com.eatthis.web.search.BlogSearchResponseDto;
 import com.eatthis.web.search.dto.BlogSearchResponseDto;
 import com.eatthis.web.search.dto.KakaoSearchBlogDto;
 import com.fasterxml.jackson.core.type.TypeReference;
