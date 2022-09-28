@@ -241,9 +241,9 @@ public class KakaoApiService {
         return objectMapper.convertValue(bodyMap.get("documents"), new TypeReference<>() {});
     }
 
-    public BlogSearchResponseDto getBlogsByKakaoApi(String placeName, String eupMyeonDong) {
+    public BlogSearchResponseDto getBlogsByKakaoApi(String placeName, String address) {
         URI uri = UriComponentsBuilder.fromUriString(KAKAO_HOST + "/v2/search/blog")
-                .queryParam("query", String.format("%s %S", placeName, eupMyeonDong))
+                .queryParam("query", String.format("%s %s", address, placeName))
                 .encode(StandardCharsets.UTF_8)
                 .build().toUri();
         HttpHeaders headers = new HttpHeaders();

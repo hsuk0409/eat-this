@@ -36,7 +36,7 @@ public class LocationSearchService {
                 .map(store ->
                         store.toSearchDetail(
                                 kakaoApiService.getImagesByKakaoApi(store.getPlaceName()),
-                                kakaoApiService.getBlogsByKakaoApi(store.getPlaceName(), store.getEupMyeonDong())
+                                kakaoApiService.getBlogsByKakaoApi(store.getPlaceName(), store.getAddress())
                         )
                 )
                 .collect(Collectors.toList());
@@ -59,7 +59,7 @@ public class LocationSearchService {
                 .map(store ->
                         store.toSearchDetail(
                                 kakaoApiService.getImagesByKakaoApi(store.getPlaceName()),
-                                kakaoApiService.getBlogsByKakaoApi(store.getPlaceName(), store.getEupMyeonDong())
+                                kakaoApiService.getBlogsByKakaoApi(store.getPlaceName(), store.getAddress())
                         )
                 )
                 .collect(Collectors.toList());
