@@ -4,22 +4,22 @@ import com.eatthis.handler.exception.CustomException;
 import com.eatthis.handler.exception.ErrorCode;
 import com.eatthis.web.location.domain.LocationCategoryData;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.util.ObjectUtils;
 
 import static com.eatthis.handler.exception.ErrorCode.INVALID_PARAMETER;
 
-@Getter @Builder
+@Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class StoresByTownSearchDto {
 
     private String keyword;
     private LocationCategoryData category = LocationCategoryData.FOOD;
-    private String longitude;
-    private String latitude;
+    private String lng;
+    private String lat;
     private int radius;
     private String town;
     private int page;
@@ -27,7 +27,7 @@ public class StoresByTownSearchDto {
 
     public void checkValidationParams() {
         if (ObjectUtils.isEmpty(this.town)) {
-            if (ObjectUtils.isEmpty(this.longitude) || ObjectUtils.isEmpty(this.latitude)) {
+            if (ObjectUtils.isEmpty(this.lng) || ObjectUtils.isEmpty(this.lat)) {
                 ErrorCode errorCode = INVALID_PARAMETER;
                 errorCode.setCustomDetail("동네 검색어 없을 때 좌표는 필수값입니다.");
                 throw new CustomException(errorCode);

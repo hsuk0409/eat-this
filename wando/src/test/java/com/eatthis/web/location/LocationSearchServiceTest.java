@@ -22,10 +22,9 @@ class LocationSearchServiceTest {
     @Test
     void searchStoresByTown() {
         //given
-        StoresByTownSearchDto searchDto = StoresByTownSearchDto.builder()
-                .category(LocationCategoryData.FOOD)
-                .town("삼성동")
-                .build();
+        StoresByTownSearchDto searchDto = new StoresByTownSearchDto();
+        searchDto.setCategory(LocationCategoryData.FOOD);
+        searchDto.setTown("삼성동");
         searchDto.initParams();
 
         //when

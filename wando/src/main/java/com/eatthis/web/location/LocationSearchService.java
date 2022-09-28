@@ -25,8 +25,8 @@ public class LocationSearchService {
         List<KakaoSearchResponseDto> storesByCircle = kakaoApiService.getStoresPagingByCircle(
                 searchDto.getKeyword(),
                 searchDto.getCategory(),
-                searchDto.getLongitude(),
-                searchDto.getLatitude(),
+                searchDto.getLng(),
+                searchDto.getLat(),
                 searchDto.getRadius(),
                 searchDto.getPage(),
                 searchDto.getSize()
