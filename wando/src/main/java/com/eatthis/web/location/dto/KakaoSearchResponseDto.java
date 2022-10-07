@@ -63,6 +63,7 @@ public class KakaoSearchResponseDto {
         return LocationSearchDetail.builder()
                 .storeName(this.placeName)
                 .categoryName(this.category.getGroupName())
+                .address(this.address)
                 .images(imagesByKakaoApi)
                 .blogResponseDto(blogResponseDto)
                 .build();
