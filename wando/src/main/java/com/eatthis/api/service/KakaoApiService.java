@@ -272,6 +272,8 @@ public class KakaoApiService {
                                     .build())
                             .collect(Collectors.toList()))
                     .totalCount((Integer) metaMap.get("total_count"))
+                    .page(page)
+                    .size(size)
                     .isEnd((Boolean) metaMap.get("is_end"))
                     .build();
         } catch (Exception ex) {
