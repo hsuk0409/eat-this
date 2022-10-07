@@ -23,6 +23,7 @@ public class LocationSearchService {
 
     public List<LocationSearchDetail> searchStores(StoresByTownSearchDto searchDto) {
         List<KakaoSearchResponseDto> storesByCircle = kakaoApiService.getStoresPagingByCircle(
+                searchDto,
                 searchDto.getKeyword(),
                 searchDto.getCategory(),
                 searchDto.getLng(),
@@ -36,7 +37,7 @@ public class LocationSearchService {
                 .map(store ->
                         store.toSearchDetail(
                                 kakaoApiService.getImagesByKakaoApi(store.getPlaceName()),
-                                kakaoApiService.getBlogsByKakaoApi(store.getPlaceName(), store.getAddress())
+                                kakaoApiService.getBlogsByKakaoApi(store.getPlaceName(), store.getAddress(), 1, 10)
                         )
                 )
                 .collect(Collectors.toList());
@@ -46,6 +47,7 @@ public class LocationSearchService {
         AddressCoordinate addressCoordinate = addressService.getCoordinateByTown(searchDto.getTown());
 
         List<KakaoSearchResponseDto> storesByCircle = kakaoApiService.getStoresPagingByCircle(
+                searchDto,
                 searchDto.getKeyword(),
                 searchDto.getCategory(),
                 addressCoordinate.getLongitude(),
@@ -59,7 +61,7 @@ public class LocationSearchService {
                 .map(store ->
                         store.toSearchDetail(
                                 kakaoApiService.getImagesByKakaoApi(store.getPlaceName()),
-                                kakaoApiService.getBlogsByKakaoApi(store.getPlaceName(), store.getAddress())
+                                kakaoApiService.getBlogsByKakaoApi(store.getPlaceName(), store.getAddress(), 1, 10)
                         )
                 )
                 .collect(Collectors.toList());

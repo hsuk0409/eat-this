@@ -24,6 +24,7 @@ public class StoresByTownSearchDto {
     private String town;
     private int page;
     private int size = 10;
+    private boolean isEnd;
 
     public void checkValidationParams() {
         if (ObjectUtils.isEmpty(this.town)) {
@@ -45,8 +46,18 @@ public class StoresByTownSearchDto {
         if (this.page <= 0) {
             this.page = 1;
         }
+        if (this.page > 45) {
+            this.page = 45;
+        }
         if (this.size <= 0) {
             this.size = 10;
         }
+        if (this.size > 45) {
+            this.size = 45;
+        }
+    }
+
+    public void setIsEnd(Boolean isEnd) {
+        this.isEnd = isEnd;
     }
 }

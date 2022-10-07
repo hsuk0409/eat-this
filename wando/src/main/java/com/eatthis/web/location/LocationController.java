@@ -114,6 +114,7 @@ public class LocationController {
                         .searchDetails(searchDetails)
                         .page(searchDto.getPage())
                         .size(searchDto.getSize())
+                        .isEnd(searchDto.isEnd())
                         .build());
 
     }

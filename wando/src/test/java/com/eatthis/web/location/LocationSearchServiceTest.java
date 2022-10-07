@@ -33,6 +33,7 @@ class LocationSearchServiceTest {
         //then
         assertThat(searchDetails).isNotEmpty();
         assertThat(searchDetails.size()).isEqualTo(10);
+        assertThat(searchDto.isEnd()).isFalse();
         searchDetails.forEach(info -> assertThat(info.getStoreName()).isNotNull());
 
     }

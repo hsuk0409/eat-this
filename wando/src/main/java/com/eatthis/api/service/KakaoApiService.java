@@ -7,6 +7,7 @@ import com.eatthis.web.location.domain.LocationCategoryData;
 import com.eatthis.web.location.dto.KakaoSearchImageDto;
 import com.eatthis.web.location.dto.KakaoSearchImageResponseDto;
 import com.eatthis.web.location.dto.KakaoSearchResponseDto;
+import com.eatthis.web.location.dto.StoresByTownSearchDto;
 import com.eatthis.web.search.dto.BlogSearchResponseDto;
 import com.eatthis.web.search.dto.KakaoSearchBlogDto;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -61,7 +62,8 @@ public class KakaoApiService {
                 .collect(Collectors.toList());
     }
 
-    public List<KakaoSearchResponseDto> getStoresPagingByCircle(String keyword, LocationCategoryData category,
+    public List<KakaoSearchResponseDto> getStoresPagingByCircle(StoresByTownSearchDto searchDto,
+                                                                String keyword, LocationCategoryData category,
                                                                 String longitude, String latitude, int radius,
                                                                 int page, int size) {
         URI uri = UriComponentsBuilder.fromUriString(KAKAO_HOST + "/v2/local/search/keyword")
@@ -77,14 +79,14 @@ public class KakaoApiService {
 
         List<KakaoSearchResponseDto> responseDtos = new ArrayList<>();
 
-        searchStoresPaging(uri, responseDtos);
+        searchStoresPaging(uri, responseDtos, searchDto);
 
         return responseDtos.stream()
                 .sorted(Comparator.comparing(KakaoSearchResponseDto::getDistance))
                 .collect(Collectors.toList());
     }
 
-    private void searchStoresPaging(URI uri, List<KakaoSearchResponseDto> accData) {
+    private void searchStoresPaging(URI uri, List<KakaoSearchResponseDto> accData, StoresByTownSearchDto searchDto) {
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.AUTHORIZATION, "KakaoAK " + KAKAO_REST_API_KEY);
 
@@ -92,6 +94,9 @@ public class KakaoApiService {
                 uri, HttpMethod.GET, new HttpEntity<>(null, headers), Object.class);
         Map<String, Object> bodyMap = objectMapper.convertValue(responseEntity.getBody(), new TypeReference<>() {});
         List<Map<String, String>> documents = objectMapper.convertValue(bodyMap.get("documents"), new TypeReference<>() {});
+        Map<String, Object> meta = objectMapper.convertValue(bodyMap.get("meta"), new TypeReference<>() {});
+
+        searchDto.setIsEnd((Boolean) meta.get("is_end"));
 
         convertAndSaveSearchResponseDto(documents, accData);
     }
@@ -132,12 +137,9 @@ public class KakaoApiService {
 
         ResponseEntity<Object> responseEntity = restTemplate.exchange(
                 uri, HttpMethod.GET, new HttpEntity<>(null, headers), Object.class);
-        Map<String, Object> bodyMap = objectMapper.convertValue(responseEntity.getBody(), new TypeReference<>() {
-        });
-        List<Map<String, String>> documents = objectMapper.convertValue(bodyMap.get("documents"), new TypeReference<>() {
-        });
-        Map<String, Object> meta = objectMapper.convertValue(bodyMap.get("meta"), new TypeReference<>() {
-        });
+        Map<String, Object> bodyMap = objectMapper.convertValue(responseEntity.getBody(), new TypeReference<>() {});
+        List<Map<String, String>> documents = objectMapper.convertValue(bodyMap.get("documents"), new TypeReference<>() {});
+        Map<String, Object> meta = objectMapper.convertValue(bodyMap.get("meta"), new TypeReference<>() {});
 
         convertAndSaveSearchResponseDto(documents, accData);
 
@@ -241,9 +243,11 @@ public class KakaoApiService {
         return objectMapper.convertValue(bodyMap.get("documents"), new TypeReference<>() {});
     }
 
-    public BlogSearchResponseDto getBlogsByKakaoApi(String placeName, String address) {
+    public BlogSearchResponseDto getBlogsByKakaoApi(String placeName, String address, int page, int size) {
         URI uri = UriComponentsBuilder.fromUriString(KAKAO_HOST + "/v2/search/blog")
                 .queryParam("query", String.format("%s %s", address, placeName))
+                .queryParam("page", page)
+                .queryParam("size", size)
                 .encode(StandardCharsets.UTF_8)
                 .build().toUri();
         HttpHeaders headers = new HttpHeaders();
@@ -264,9 +268,11 @@ public class KakaoApiService {
                                     .url(document.get("url"))
                                     .blogName(document.get("blogname"))
                                     .thumbnail(document.get("thumbnail"))
+                                    .createdDateTimeString(document.get("datetime"))
                                     .build())
                             .collect(Collectors.toList()))
                     .totalCount((Integer) metaMap.get("total_count"))
+                    .isEnd((Boolean) metaMap.get("is_end"))
                     .build();
         } catch (Exception ex) {
             log.error("블로그 검색 데이터 변환 중 에러 발생! " + ex);
