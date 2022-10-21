@@ -60,9 +60,16 @@ public class KakaoSearchResponseDto {
 
     public LocationSearchDetail toSearchDetail(List<String> imagesByKakaoApi,
                                                BlogSearchResponseDto blogResponseDto) {
+        String categoryFullName = this.category.getFullName();
+        String firstCategory;
+        try {
+            firstCategory = categoryFullName.split(">")[1].trim();
+        } catch (Exception ex) {
+            firstCategory = this.category.getGroupName();
+        }
         return LocationSearchDetail.builder()
                 .storeName(this.placeName)
-                .categoryName(this.category.getGroupName())
+                .categoryName(firstCategory)
                 .address(this.address)
                 .images(imagesByKakaoApi)
                 .blogResponseDto(blogResponseDto)
