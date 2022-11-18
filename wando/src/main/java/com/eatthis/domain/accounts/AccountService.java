@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 @Slf4j
@@ -18,7 +19,7 @@ public class AccountService {
     private final AccountRepository accountRepository;
 
     @Transactional
-    public Long saveIfNewAccount(AccountSaveRequestDto requestDto) {
+    public Long saveIfNewAccount(HttpServletRequest request, AccountSaveRequestDto requestDto) {
         String fcmToken = requestDto.getFcmToken();
         Optional<Account> accountOptional = accountRepository
                 .findByFcmToken(fcmToken);

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.stream.Collectors;
 
@@ -24,7 +25,8 @@ public class AccountController {
     private final AccountService accountService;
 
     @PostMapping("/accounts")
-    public ResponseEntity<Long> saveIfNewAccount(@RequestBody @Valid AccountSaveRequestDto requestDto,
+    public ResponseEntity<Long> saveIfNewAccount(HttpServletRequest request,
+                                                 @RequestBody @Valid AccountSaveRequestDto requestDto,
                                                  Errors errors) {
 
         if (errors.hasErrors()) {
@@ -37,7 +39,7 @@ public class AccountController {
         }
 
         return ResponseEntity.ok()
-                .body(accountService.saveIfNewAccount(requestDto));
+                .body(accountService.saveIfNewAccount(request, requestDto));
 
     }
 
