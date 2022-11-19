@@ -3,13 +3,19 @@ package com.eatthis.handler.exception;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.*;
 
 @Getter
 public enum ErrorCode {
 
+    INVALID_AUTHORIZATION(UNAUTHORIZED, null),
+
     PARAMETER_IS_REQUIRED(BAD_REQUEST, null),
-    INVALID_PARAMETER(BAD_REQUEST, null)
+    INVALID_PARAMETER(BAD_REQUEST, null),
+
+    NOT_FOUND_ACCOUNT(NOT_FOUND, null),
+    NOT_FOUND_DEVICE(NOT_FOUND, null)
+
     ;
 
     private final HttpStatus httpStatus;

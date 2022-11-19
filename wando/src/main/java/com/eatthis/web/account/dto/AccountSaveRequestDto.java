@@ -15,7 +15,7 @@ public class AccountSaveRequestDto {
     private String email;
     private Integer phone;
     private String picture;
-    @NotNull(message = "fcmToken은 필수값입니다.")
-    private String fcmToken;
+    @NotNull(message = "기기 정보는 필수값입니다.")
+    private DeviceDto device;
 
 }
