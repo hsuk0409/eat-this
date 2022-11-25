@@ -72,8 +72,8 @@ class AccountTest {
         Account account = getSavedAccount(nickname);
 
         Alarm alarm = alarmRepository.save(Alarm.builder()
-                .startTime(nowTime)
                 .build());
+
         account.addAlarm(alarm);
 
         //then
