@@ -1,6 +1,5 @@
 package com.eatthis.domain.accounts;
 
-import com.eatthis.domain.alarms.Alarm;
 import com.eatthis.domain.alarms.AlarmRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,7 +9,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -57,27 +55,6 @@ class AccountTest {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void updateLastLoginDateTimeOnNewTransaction(Account account) {
         account.updateLastLoginDateTime();
-    }
-
-    @Transactional
-    @DisplayName("계정에 알람을 매핑시킨다.")
-    @Test
-    void mapAlarmToAccountTest() {
-        //given
-        String nickname = "justin";
-
-        LocalTime nowTime = LocalTime.now();
-
-        //when
-        Account account = getSavedAccount(nickname);
-
-        Alarm alarm = alarmRepository.save(Alarm.builder()
-                .build());
-
-        account.addAlarm(alarm);
-
-        //then
-        assertThat(account.getAlarms().get(0)).isSameAs(alarm);
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
