@@ -7,8 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
@@ -20,10 +22,8 @@ public class Alarm extends BaseTimeEntity {
     @Column(name = "alarm_id")
     private Long id;
 
-    @ElementCollection(targetClass = MyDayOfWeek.class)
-    @Enumerated(EnumType.STRING)
-    @Column(name = "dayOfWeeks")
-    private Set<MyDayOfWeek> dayOfWeeks = new LinkedHashSet<>();
+    @Column(nullable = false)
+    private String daysOfWeek;
 
     @Column(nullable = false)
     private int minutes;
@@ -43,9 +43,9 @@ public class Alarm extends BaseTimeEntity {
     private Account account;
 
     @Builder
-    public Alarm(Set<MyDayOfWeek> dayOfWeeks, int minutes, int seconds,
+    public Alarm(String daysOfWeek, int minutes, int seconds,
                  Boolean usable, AlarmType alarmType, Account account) {
-        this.dayOfWeeks = dayOfWeeks;
+        this.daysOfWeek = daysOfWeek;
         this.minutes = minutes;
         this.seconds = seconds;
         this.usable = usable;
@@ -55,6 +55,19 @@ public class Alarm extends BaseTimeEntity {
 
     public void updateAccount(Account account) {
         this.account = account;
+    }
+
+    public void addDayOfWeek(String daysOfWeek) {
+        if (this.daysOfWeek.contains(daysOfWeek)) return;
+
+        this.daysOfWeek += String.format(",%s", daysOfWeek);
+    }
+
+    public List<String> getDaysOfWeek() {
+        if (this.daysOfWeek == null) return new ArrayList<>();
+
+        String[] daysOfWeek = this.daysOfWeek.split(",");
+        return Arrays.stream(daysOfWeek).collect(Collectors.toList());
     }
 
 }

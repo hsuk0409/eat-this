@@ -28,6 +28,7 @@ public class AccountController {
     @Value("${eat-this-auth-key}")
     private String AUTH_KEY;
     private final AccountService accountService;
+    private final AES256 aes256;
 
     @PostMapping("/accounts")
     public ResponseEntity<Long> saveIfNewAccount(HttpServletRequest request,
@@ -52,10 +53,10 @@ public class AccountController {
 
     private void checkAuthHeader(HttpServletRequest request) {
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        AES256 aes256 = new AES256();
         try {
             String decrypted = aes256.decrypt(authHeader);
             if (!decrypted.equals(AUTH_KEY)) {
+                log.info(decrypted);
                 throw new Exception("올바르지 않은 인증키입니다.");
             }
         } catch (Exception e) {
