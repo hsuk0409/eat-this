@@ -1,6 +1,6 @@
 package com.eatthis.web.location;
 
-import com.eatthis.api.service.KakaoApiService;
+import com.eatthis.api.kakao.KakaoApiService;
 import com.eatthis.web.address.AddressService;
 import com.eatthis.web.address.dto.AddressCoordinate;
 import com.eatthis.web.location.dto.KakaoSearchResponseDto;

@@ -1,6 +1,6 @@
 package com.eatthis.web.address;
 
-import com.eatthis.api.service.KakaoAddressService;
+import com.eatthis.api.kakao.KakaoAddressService;
 import com.eatthis.handler.exception.CustomException;
 import com.eatthis.handler.exception.ErrorCode;
 import com.eatthis.web.address.dto.AddressCoordinate;

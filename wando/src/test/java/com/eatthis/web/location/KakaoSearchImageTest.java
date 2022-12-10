@@ -1,6 +1,6 @@
 package com.eatthis.web.location;
 
-import com.eatthis.api.service.KakaoApiService;
+import com.eatthis.api.kakao.KakaoApiService;
 import com.eatthis.web.location.dto.KakaoSearchImageResponseDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

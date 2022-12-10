@@ -1,6 +1,6 @@
 package com.eatthis.web.search;
 
-import com.eatthis.api.service.KakaoApiService;
+import com.eatthis.api.kakao.KakaoApiService;
 import com.eatthis.web.search.dto.BlogSearchResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

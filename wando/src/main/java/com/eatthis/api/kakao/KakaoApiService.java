@@ -1,4 +1,4 @@
-package com.eatthis.api.service;
+package com.eatthis.api.kakao;
 
 import com.eatthis.handler.exception.CustomException;
 import com.eatthis.handler.exception.ErrorCode;

@@ -1,6 +1,6 @@
 package com.eatthis.web.category;
 
-import com.eatthis.api.service.KakaoApiService;
+import com.eatthis.api.kakao.KakaoApiService;
 import com.eatthis.web.category.dto.CategoryByStep;
 import com.eatthis.web.location.domain.LocationCategoryData;
 import com.eatthis.web.location.dto.KakaoSearchResponseDto;

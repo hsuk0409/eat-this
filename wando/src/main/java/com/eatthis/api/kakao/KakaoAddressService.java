@@ -1,4 +1,4 @@
-package com.eatthis.api.service;
+package com.eatthis.api.kakao;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

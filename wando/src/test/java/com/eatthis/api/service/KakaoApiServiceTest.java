@@ -1,5 +1,6 @@
 package com.eatthis.api.service;
 
+import com.eatthis.api.kakao.KakaoApiService;
 import com.eatthis.web.search.dto.BlogSearchResponseDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
