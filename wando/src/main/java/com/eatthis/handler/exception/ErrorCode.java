@@ -14,7 +14,9 @@ public enum ErrorCode {
     INVALID_PARAMETER(BAD_REQUEST, null),
 
     NOT_FOUND_ACCOUNT(NOT_FOUND, null),
-    NOT_FOUND_DEVICE(NOT_FOUND, null)
+    NOT_FOUND_DEVICE(NOT_FOUND, null),
+
+    REQUEST_EXTERNAL_API_ERROR(BAD_REQUEST, null)
 
     ;
 

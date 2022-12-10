@@ -38,3 +38,5 @@ out/
 
 application-env.properties
 application-db.properties
+
+pawstreet-firebase-key.json
